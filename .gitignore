@@ -1,0 +1,12 @@
+node_modules/
+npm-debug.log
+yarn-error.log
+
+/dist/
+.history
+.idea
+.vscode
+.yarnclean
+package-lock.json
+yarn.lock
+/src/config.ts
