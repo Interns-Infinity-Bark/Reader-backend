@@ -8,16 +8,17 @@ const sequelize = new Sequelize({
 });
 
 (async () => {
-    await User.sync({
+    await sequelize.sync({
         force: true
     });
+
     const user = new User({
-        email: 'test@111.com',
+        email: 'qaqrz@qq.com',
+        password: 'QAQrz',
         nickname: 'QAQrz'
     });
     await user.save();
-    const users = await User.findAll({
-        order: [['id', 'DESC'], ['email', 'DESC']]
-    });
-    console.log(users);
+
+    const users = await User.findAll();
+    console.log(users[0].nickname);
 })();
