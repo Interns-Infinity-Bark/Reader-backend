@@ -7,6 +7,7 @@ const sequelize = new Sequelize({
     modelPaths: [__dirname + '/models']
 });
 
+// Test
 (async () => {
     await sequelize.sync({
         force: true
