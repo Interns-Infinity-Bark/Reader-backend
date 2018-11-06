@@ -1,6 +1,9 @@
 import { config } from './config';
 import { Sequelize } from 'sequelize-typescript';
 import User from './models/User';
+import Koa from 'koa';
+
+const app = new Koa();
 
 const sequelize = new Sequelize({
     ...config,
@@ -23,3 +26,10 @@ const sequelize = new Sequelize({
     const users = await User.findAll();
     console.log(users[0].nickname);
 })();
+
+
+app.use(context => {
+    context.body = 'Hello World!';
+});
+
+app.listen(3000);
