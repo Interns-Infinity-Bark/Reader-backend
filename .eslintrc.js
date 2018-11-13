@@ -21,10 +21,4 @@ module.exports = {
         'react/jsx-closing-bracket-location': 'off',
     },
     parser: 'babel-eslint',
-    plugins: ['typescript'],
-    parserOptions: {
-        ecmaFeatures: {
-            legacyDecorators: true,
-        },
-    },
 };
