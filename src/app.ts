@@ -1,13 +1,15 @@
 import { config } from './config';
 import { Sequelize } from 'sequelize-typescript';
 import User from './models/User';
-import Koa from 'koa';
+import * as Koa from 'koa';
+import * as path from 'path';
 
 const app = new Koa();
 
 const sequelize = new Sequelize({
     ...config,
-    modelPaths: [__dirname + '/models']
+    modelPaths: [path.join(__dirname, '/models')],
+    operatorsAliases: false
 });
 
 // Test
