@@ -7,6 +7,5 @@ yarn-error.log
 .idea
 .vscode
 .yarnclean
-package-lock.json
 yarn.lock
 /src/config.ts

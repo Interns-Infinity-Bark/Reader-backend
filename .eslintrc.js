@@ -15,11 +15,16 @@ module.exports = {
             {
                 arraysInObjects: true,
                 objectsInObjects: true,
-            }
+            },
         ],
         'no-return-await': 'off',
         'react/jsx-closing-bracket-location': 'off',
     },
     parser: 'babel-eslint',
     plugins: ['typescript'],
+    parserOptions: {
+        ecmaFeatures: {
+            legacyDecorators: true,
+        },
+    },
 };
