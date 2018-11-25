@@ -46,4 +46,17 @@ export default class User extends Model<User> {
 
     @HasMany(() => UserVote)
     userVotes: UserVote[];
+
+    toJSON() {
+        return {
+            id: this.id,
+            email: this.email,
+            nickname: this.nickname,
+            role: this.role,
+            votes: this.votes,
+            userVotes: this.userVotes,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt
+        };
+    }
 }

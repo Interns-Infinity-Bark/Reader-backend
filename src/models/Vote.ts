@@ -1,5 +1,5 @@
 import {
-    Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, DataType, AllowNull, Default, HasMany
+    Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, DataType, AllowNull, Default, HasMany, IsDate
 } from 'sequelize-typescript';
 import User from './User';
 import { json } from 'sequelize';
@@ -43,9 +43,24 @@ export default class Vote extends Model<Vote> {
     isActive: boolean;
 
     @AllowNull(false)
+    @IsDate
     @Column
     endAt: Date;
 
     @HasMany(() => UserVote)
     userVotes: UserVote[];
+
+    toJSON() {
+        return {
+            id: this.id,
+            user: this.user,
+            title: this.title,
+            content: this.content,
+            private: this.private,
+            anonymous: this.anonymous,
+            endAt: this.endAt,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt
+        };
+    }
 }

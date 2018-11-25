@@ -3,9 +3,9 @@ npm-debug.log
 yarn-error.log
 
 /dist/
+/logs/
 .history
 .idea
 .vscode
 .yarnclean
-yarn.lock
 /src/config.ts
