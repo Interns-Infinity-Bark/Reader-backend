@@ -26,4 +26,15 @@ export default class UserVote extends Model<UserVote> {
     @AllowNull(false)
     @Column
     option: number;
+
+    toJSON() {
+        return {
+            id: this.id,
+            user: this.user,
+            vote: this.vote,
+            option: this.option,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt
+        };
+    }
 }

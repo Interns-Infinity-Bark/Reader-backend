@@ -22,4 +22,14 @@ export default class Admin extends Model<Admin> {
     @Unique
     @Column
     nickname: string;
+
+    toJSON() {
+        return {
+            id: this.id,
+            username: this.username,
+            nickname: this.nickname,
+            createdAt: this.createdAt,
+            updatedAt: this.updatedAt
+        };
+    }
 }
