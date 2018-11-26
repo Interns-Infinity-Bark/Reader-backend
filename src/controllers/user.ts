@@ -10,7 +10,7 @@ export const register = async (ctx: any) => {
         ctx.body = jsonResp('error', '已登录');
         return;
     }
-    const {email, password, nickname} = ctx.request.body;
+    const {email, password, confirmPassword, nickname} = ctx.request.body;
     if (!email) {
         ctx.body = jsonResp('error', 'Email 不能为空');
     } else if (!isEmail(email)) {
@@ -23,6 +23,8 @@ export const register = async (ctx: any) => {
         ctx.body = jsonResp('error', 'Email 已存在');
     } else if (!password) {
         ctx.body = jsonResp('error', '密码不能为空');
+    } else if (password !== confirmPassword) {
+        ctx.body = jsonResp('error', '两次输入的密码不一致');
     } else if (!nickname) {
         ctx.body = jsonResp('error', '昵称不能为空');
     } else if (await User.findOne({
