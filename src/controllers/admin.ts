@@ -1,8 +1,7 @@
 import Admin from '../models/Admin';
 import { jsonResp, md5 } from '../utils/stringUtil';
-import User, { Role } from '../models/User';
-import isEmail = require('validator/lib/isEmail');
-import isInt = require('validator/lib/isInt');
+import User from '../models/User';
+import { isEmail, isInt } from 'validator';
 
 export const login = async (ctx: any) => {
     if (ctx.session.admin) {
@@ -96,8 +95,7 @@ export const admin = async (ctx: any) => {
     });
 };
 
-export const userlist = async (ctx: any) => {
-    // todo: search
+export const users = async (ctx: any) => {
     let users = await User.findAll();
     const {email, nickname, page} = ctx.query;
     if (email && isEmail(email)) {

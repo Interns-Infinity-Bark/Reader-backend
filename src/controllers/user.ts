@@ -1,6 +1,7 @@
 import User from '../models/User';
 import { jsonResp, md5 } from '../utils/stringUtil';
-import { isEmail } from 'validator';
+import { isEmail, isInt } from 'validator';
+import Vote from '../models/Vote';
 
 export const register = async (ctx: any) => {
     if (ctx.session.user) {
@@ -149,4 +150,21 @@ export const user = async (ctx: any) => {
             user: ctx.session.user
         });
     }
+};
+
+export const votes = async (ctx: any) => {
+    const {title, page} = ctx.query;
+    let votes = title ? await Vote.findAll({
+        where: {
+            title: {
+                $iLike: title
+            }
+        }
+    }) : await Vote.findAll();
+    if (page && isInt(page) && parseInt(page) > 0) {
+        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    }
+    ctx.body = jsonResp('ok', 'success', {
+        votes: votes
+    });
 };

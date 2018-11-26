@@ -1,6 +1,6 @@
 import * as Router from 'koa-router';
 import * as admin from './admin';
-import { user, login, logout, modifyNickname, modifyPassword, register } from '../controllers/user';
+import { user, login, logout, modifyNickname, modifyPassword, register, votes } from '../controllers/user';
 import { requireLogin } from '../controllers';
 
 export const routers = new Router()
@@ -11,4 +11,5 @@ export const routers = new Router()
     .get('/', requireLogin, user)
     .put('/nickname', requireLogin, modifyNickname)
     .put('/password', requireLogin, modifyPassword)
-    .get('/user/:id', requireLogin, user);
+    .get('/user/:id', requireLogin, user)
+    .get('votes', requireLogin, votes);
