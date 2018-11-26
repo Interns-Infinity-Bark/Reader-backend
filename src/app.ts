@@ -5,7 +5,7 @@ import * as path from 'path';
 import { routers } from './routers';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
-import cors from 'koa2-cors';
+import * as cors from 'koa2-cors';
 
 const app = new Koa();
 
