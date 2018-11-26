@@ -65,13 +65,17 @@ const sequelize = new Sequelize({
 
 app.keys = ['votee'];
 
+app.use(cors({
+    origin: '*',
+    allowHeaders: ['Content-Type'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
+
 app.use(bodyParser());
 
 app.use(session(app));
 
 app.use(routers.routes()).use(routers.allowedMethods());
-
-app.use(cors());
 
 app.use(ctx => {
     ctx.set('Content-Type', 'application/json');
