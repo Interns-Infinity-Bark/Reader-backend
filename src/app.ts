@@ -5,6 +5,7 @@ import * as path from 'path';
 import { routers } from './routers';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
+import cors from 'koa2-cors';
 
 const app = new Koa();
 
@@ -70,8 +71,9 @@ app.use(session(app));
 
 app.use(routers.routes()).use(routers.allowedMethods());
 
+app.use(cors());
+
 app.use(ctx => {
-    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.set('Content-Type', 'application/json');
 });
 
