@@ -1,8 +1,8 @@
 import {
-    Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, DataType, AllowNull, Default, HasMany, IsDate
+    Table, Column, Model, PrimaryKey, AutoIncrement, ForeignKey, DataType, AllowNull, Default, HasMany, IsDate,
+    BelongsTo
 } from 'sequelize-typescript';
 import User from './User';
-import { json } from 'sequelize';
 import UserVote from './UserVote';
 
 @Table({
@@ -14,18 +14,21 @@ export default class Vote extends Model<Vote> {
     @Column
     id: number;
 
-    @AllowNull(false)
     @ForeignKey(() => User)
     @Column
-    user: number;
+    userId: number;
+
+    @BelongsTo(() => User)
+    user: User;
 
     @AllowNull(false)
     @Column(DataType.TEXT)
     title: string;
 
+    // todo
     @AllowNull(false)
     @Column(DataType.JSON)
-    content: json;
+    content: object;
 
     @Default(false)
     @Column
@@ -53,7 +56,7 @@ export default class Vote extends Model<Vote> {
     toJSON() {
         return {
             id: this.id,
-            user: this.user,
+            user: this.userId,
             title: this.title,
             content: this.content,
             private: this.private,
