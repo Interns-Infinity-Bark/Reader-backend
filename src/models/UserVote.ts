@@ -1,5 +1,5 @@
 import {
-    Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull, ForeignKey
+    Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull, ForeignKey, BelongsTo
 } from 'sequelize-typescript';
 import User from './User';
 import Vote from './Vote';
@@ -13,15 +13,19 @@ export default class UserVote extends Model<UserVote> {
     @Column
     id: number;
 
-    @AllowNull(false)
     @ForeignKey(() => User)
     @Column
-    user: number;
+    userId: number;
 
-    @AllowNull(false)
+    @BelongsTo(() => User)
+    user: User;
+
     @ForeignKey(() => Vote)
     @Column
-    vote: number;
+    voteId: number;
+
+    @BelongsTo(() => Vote)
+    vote: Vote;
 
     @AllowNull(false)
     @Column
@@ -30,8 +34,8 @@ export default class UserVote extends Model<UserVote> {
     toJSON() {
         return {
             id: this.id,
-            user: this.user,
-            vote: this.vote,
+            user: this.userId,
+            vote: this.voteId,
             option: this.option,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt

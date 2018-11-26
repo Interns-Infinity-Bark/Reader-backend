@@ -2,6 +2,8 @@ import User from '../models/User';
 import { jsonResp, md5 } from '../utils/stringUtil';
 import { isEmail, isInt } from 'validator';
 import Vote from '../models/Vote';
+import { now } from 'lodash';
+import { Op } from 'sequelize';
 
 export const register = async (ctx: any) => {
     if (ctx.session.user) {
@@ -13,7 +15,7 @@ export const register = async (ctx: any) => {
         ctx.body = jsonResp('error', 'Email 不能为空');
     } else if (!isEmail(email)) {
         ctx.body = jsonResp('error', 'Email 格式错误');
-    } else if (User.findOne({
+    } else if (await User.findOne({
         where: {
             email: email
         }
@@ -23,7 +25,7 @@ export const register = async (ctx: any) => {
         ctx.body = jsonResp('error', '密码不能为空');
     } else if (!nickname) {
         ctx.body = jsonResp('error', '昵称不能为空');
-    } else if (User.findOne({
+    } else if (await User.findOne({
         where: {
             nickname: nickname
         }
@@ -157,10 +159,62 @@ export const votes = async (ctx: any) => {
     let votes = title ? await Vote.findAll({
         where: {
             title: {
-                $iLike: title
+                [Op.like]: '%' + title + '%'
             }
         }
     }) : await Vote.findAll();
+    if (page && isInt(page) && parseInt(page) > 0) {
+        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    }
+    ctx.body = jsonResp('ok', 'success', {
+        votes: votes
+    });
+};
+
+export const ongoingVotes = async (ctx: any) => {
+    const {title, page} = ctx.query;
+    let votes = title ? await Vote.findAll({
+        where: {
+            title: {
+                [Op.like]: '%' + title + '%'
+            },
+            endAt: {
+                [Op.gt]: now()
+            }
+        }
+    }) : await Vote.findAll({
+        where: {
+            endAt: {
+                [Op.gt]: now()
+            }
+        }
+    });
+    if (page && isInt(page) && parseInt(page) > 0) {
+        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    }
+    ctx.body = jsonResp('ok', 'success', {
+        votes: votes
+    });
+};
+
+export const endedVotes = async (ctx: any) => {
+    const {title, page} = ctx.query;
+    let votes = title ? await Vote.findAll({
+        where: {
+            title: {
+                [Op.like]: '%' + title + '%'
+            },
+            endAt: {
+                [Op.lte]: now()
+            }
+        }
+    }) : await Vote.findAll({
+        where: {
+            endAt: {
+                [Op.lte]: now()
+            }
+        }
+    });
     if (page && isInt(page) && parseInt(page) > 0) {
         votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
     }
