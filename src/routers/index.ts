@@ -6,6 +6,7 @@ import { votes, ongoingVotes, endedVotes, uvotes, addVote } from '../controllers
 
 export const routers = new Router()
     .use('/admin', admin.router.routes(), admin.router.allowedMethods())
+    .get('/', requireLogin, user)
     .post('/register', register)
     .post('/login', login)
     .get('/logout', logout)
