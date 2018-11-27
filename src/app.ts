@@ -95,6 +95,7 @@ app.use(cors({
     origin: 'http://localhost:3000',
     allowHeaders: ['Content-Type'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
 }));
 
 app.use(bodyParser());
