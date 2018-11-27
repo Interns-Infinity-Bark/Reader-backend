@@ -1,4 +1,4 @@
-import User from '../models/User';
+import User, { Role } from '../models/User';
 import { jsonResp, md5 } from '../utils/stringUtil';
 import { isEmail, isInt } from 'validator';
 
@@ -212,6 +212,54 @@ export const enableUser = async (ctx: any) => {
             ctx.body = jsonResp('ok', '启用用户成功');
         } else {
             ctx.body = jsonResp('error', '用户未被禁用');
+        }
+    } else {
+        ctx.body = jsonResp('error', '用户不存在');
+    }
+};
+
+export const disableManager = async (ctx: any) => {
+    const userId = ctx.request.body.userId;
+    if (!userId) {
+        ctx.body = jsonResp('error', 'userId 不能为空');
+        return;
+    }
+    const user = await User.findOne({
+        where: {
+            id: userId
+        }
+    });
+    if (user) {
+        if (user.role === Role.MANAGER) {
+            user.role = Role.USER;
+            await user.save();
+            ctx.body = jsonResp('ok', '撤销管理员权限成功');
+        } else {
+            ctx.body = jsonResp('error', '用户没有管理员权限');
+        }
+    } else {
+        ctx.body = jsonResp('error', '用户不存在');
+    }
+};
+
+export const enableManager = async (ctx: any) => {
+    const userId = ctx.request.body.userId;
+    if (!userId) {
+        ctx.body = jsonResp('error', 'userId 不能为空');
+        return;
+    }
+    const user = await User.findOne({
+        where: {
+            id: userId
+        }
+    });
+    if (user) {
+        if (user.role === Role.USER) {
+            user.role = Role.MANAGER;
+            await user.save();
+            ctx.body = jsonResp('ok', '设置管理员权限成功');
+        } else {
+            ctx.body = jsonResp('error', '用户已有管理员权限');
         }
     } else {
         ctx.body = jsonResp('error', '用户不存在');

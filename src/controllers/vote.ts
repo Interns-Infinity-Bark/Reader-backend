@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import { isInt } from 'validator';
 import { jsonResp } from '../utils/stringUtil';
 import { now } from 'lodash';
+import User from '../models/User';
 
 export const votes = async (ctx: any) => {
     const {title, page} = ctx.query;
@@ -13,6 +14,30 @@ export const votes = async (ctx: any) => {
             }
         }
     }) : await Vote.findAll();
+    if (page && isInt(page) && parseInt(page) > 0) {
+        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    }
+    ctx.body = jsonResp('ok', 'success', {
+        votes: votes
+    });
+};
+
+export const uvotes = async (ctx: any) => {
+    const userId = ctx.params.id;
+    const page = ctx.query.page;
+    const user = await User.findOne({
+        where: {
+            id: userId
+        }
+    });
+    if (!user) {
+        ctx.body = jsonResp('error', '用户不存在');
+        return;
+    }
+    let votes = await user.$get('votes');
+    if (!Array.isArray(votes)) {
+        votes = [votes];
+    }
     if (page && isInt(page) && parseInt(page) > 0) {
         votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
     }
