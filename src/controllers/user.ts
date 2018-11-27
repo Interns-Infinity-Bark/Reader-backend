@@ -1,9 +1,6 @@
 import User from '../models/User';
 import { jsonResp, md5 } from '../utils/stringUtil';
 import { isEmail, isInt } from 'validator';
-import Vote from '../models/Vote';
-import { now } from 'lodash';
-import { Op } from 'sequelize';
 
 export const register = async (ctx: any) => {
     if (ctx.session.user) {
@@ -156,71 +153,67 @@ export const user = async (ctx: any) => {
     }
 };
 
-export const votes = async (ctx: any) => {
-    const {title, page} = ctx.query;
-    let votes = title ? await Vote.findAll({
-        where: {
-            title: {
-                [Op.like]: '%' + title + '%'
-            }
-        }
-    }) : await Vote.findAll();
+export const users = async (ctx: any) => {
+    let users = await User.findAll();
+    const {email, nickname, page} = ctx.query;
+    if (email && isEmail(email)) {
+        users = users.filter(user => user.email === email);
+    }
+    if (nickname) {
+        users = users.filter(user => user.nickname === nickname);
+    }
     if (page && isInt(page) && parseInt(page) > 0) {
-        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+        users = users.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
     }
     ctx.body = jsonResp('ok', 'success', {
-        votes: votes
+        users: users
     });
 };
 
-export const ongoingVotes = async (ctx: any) => {
-    const {title, page} = ctx.query;
-    let votes = title ? await Vote.findAll({
-        where: {
-            title: {
-                [Op.like]: '%' + title + '%'
-            },
-            endAt: {
-                [Op.gt]: now()
-            }
-        }
-    }) : await Vote.findAll({
-        where: {
-            endAt: {
-                [Op.gt]: now()
-            }
-        }
-    });
-    if (page && isInt(page) && parseInt(page) > 0) {
-        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+export const disableUser = async (ctx: any) => {
+    const userId = ctx.request.body.userId;
+    if (!userId) {
+        ctx.body = jsonResp('error', 'userId 不能为空');
+        return;
     }
-    ctx.body = jsonResp('ok', 'success', {
-        votes: votes
+    const user = await User.findOne({
+        where: {
+            id: userId
+        }
     });
+    if (user) {
+        if (user.isActive === true) {
+            user.isActive = false;
+            await user.save();
+            ctx.body = jsonResp('ok', '禁用用户成功');
+        } else {
+            ctx.body = jsonResp('error', '用户已被禁用');
+        }
+    } else {
+        ctx.body = jsonResp('error', '用户不存在');
+    }
 };
 
-export const endedVotes = async (ctx: any) => {
-    const {title, page} = ctx.query;
-    let votes = title ? await Vote.findAll({
-        where: {
-            title: {
-                [Op.like]: '%' + title + '%'
-            },
-            endAt: {
-                [Op.lte]: now()
-            }
-        }
-    }) : await Vote.findAll({
-        where: {
-            endAt: {
-                [Op.lte]: now()
-            }
-        }
-    });
-    if (page && isInt(page) && parseInt(page) > 0) {
-        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+export const enableUser = async (ctx: any) => {
+    const userId = ctx.request.body.userId;
+    if (!userId) {
+        ctx.body = jsonResp('error', 'userId 不能为空');
+        return;
     }
-    ctx.body = jsonResp('ok', 'success', {
-        votes: votes
+    const user = await User.findOne({
+        where: {
+            id: userId
+        }
     });
+    if (user) {
+        if (user.isActive === false) {
+            user.isActive = true;
+            await user.save();
+            ctx.body = jsonResp('ok', '启用用户成功');
+        } else {
+            ctx.body = jsonResp('error', '用户未被禁用');
+        }
+    } else {
+        ctx.body = jsonResp('error', '用户不存在');
+    }
 };

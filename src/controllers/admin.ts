@@ -1,7 +1,5 @@
 import Admin from '../models/Admin';
 import { jsonResp, md5 } from '../utils/stringUtil';
-import User from '../models/User';
-import { isEmail, isInt } from 'validator';
 
 export const login = async (ctx: any) => {
     if (ctx.session.admin) {
@@ -92,22 +90,5 @@ export const modifyPassword = async (ctx: any) => {
 export const admin = async (ctx: any) => {
     ctx.body = jsonResp('ok', 'success', {
         user: ctx.session.admin
-    });
-};
-
-export const users = async (ctx: any) => {
-    let users = await User.findAll();
-    const {email, nickname, page} = ctx.query;
-    if (email && isEmail(email)) {
-        users = users.filter(user => user.email === email);
-    }
-    if (nickname) {
-        users = users.filter(user => user.nickname === nickname);
-    }
-    if (page && isInt(page) && parseInt(page) > 0) {
-        users = users.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
-    }
-    ctx.body = jsonResp('ok', 'success', {
-        users: users
     });
 };
