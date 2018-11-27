@@ -65,7 +65,7 @@ export const uvotes = async (ctx: any) => {
         votes = [votes];
     }
     if (title) {
-        votes = votes.filter(vote => vote.title.includes(title));
+        // votes = votes.filter(vote => vote.title.includes(title));
     }
     if (page && isInt(page) && parseInt(page) > 0) {
         votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
