@@ -174,3 +174,18 @@ export const enableVote = async (ctx: any) => {
         ctx.body = jsonResp('error', '投票不存在');
     }
 };
+
+export const vote = async (ctx: any) => {
+    const vote = await Vote.findOne({
+        where: {
+            id: ctx.params.id
+        }
+    });
+    if (vote) {
+        ctx.body = jsonResp('ok', 'success', {
+            vote: vote
+        });
+    } else {
+        ctx.body = jsonResp('error', '投票不存在');
+    }
+};

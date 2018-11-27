@@ -6,7 +6,7 @@ import { disableVote, enableVote } from '../controllers/vote';
 
 export const router = new Router()
     .post('/login', login)
-    .get('/logout', logout)
+    .get('/logout', requireAdmin, logout)
     .get('/', requireAdmin, admin)
     .put('/nickname', requireAdmin, modifyNickname)
     .put('/password', requireAdmin, modifyPassword)
