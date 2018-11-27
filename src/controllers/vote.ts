@@ -5,6 +5,32 @@ import { jsonResp } from '../utils/stringUtil';
 import { now } from 'lodash';
 import User from '../models/User';
 
+export const addVote = async (ctx: any) => {
+    const user = await User.findOne({
+        where: {
+            id: ctx.session.user.id
+        }
+    });
+    if (!user) {
+        ctx.body = jsonResp('error', '用户不存在');
+        return;
+    }
+    const {title, content, isPrivate, password, anonymous, endAt} = ctx.body;
+    const vote = new Vote({
+        title: title,
+        content: content,
+        private: isPrivate,
+        password: password,
+        anonymous: anonymous,
+        endAt: endAt
+    });
+    await vote.save();
+    await user.$add('votes', vote);
+    ctx.body = jsonResp('ok', '发布投票成功', {
+        vote: vote
+    });
+};
+
 export const votes = async (ctx: any) => {
     const {title, page} = ctx.query;
     let votes = title ? await Vote.findAll({
