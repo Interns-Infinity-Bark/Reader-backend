@@ -157,10 +157,10 @@ export const users = async (ctx: any) => {
     let users = await User.findAll();
     const {email, nickname, page} = ctx.query;
     if (email && isEmail(email)) {
-        users = users.filter(user => user.email === email);
+        users = users.filter(user => user.email.includes(email));
     }
     if (nickname) {
-        users = users.filter(user => user.nickname === nickname);
+        users = users.filter(user => user.nickname.includes(nickname));
     }
     if (page && isInt(page) && parseInt(page) > 0) {
         users = users.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);

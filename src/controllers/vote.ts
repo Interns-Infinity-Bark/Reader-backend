@@ -50,7 +50,7 @@ export const votes = async (ctx: any) => {
 
 export const uvotes = async (ctx: any) => {
     const userId = ctx.params.id;
-    const page = ctx.query.page;
+    const {title, page} = ctx.query;
     const user = await User.findOne({
         where: {
             id: userId
@@ -63,6 +63,9 @@ export const uvotes = async (ctx: any) => {
     let votes = await user.$get('votes');
     if (!Array.isArray(votes)) {
         votes = [votes];
+    }
+    if (title) {
+        votes = votes.filter(vote => vote.title.includes(title));
     }
     if (page && isInt(page) && parseInt(page) > 0) {
         votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
