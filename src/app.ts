@@ -92,9 +92,10 @@ const sequelize = new Sequelize({
 app.keys = ['votee'];
 
 app.use(cors({
-    origin: '*',
+    origin: 'http://localhost:3000',
     allowHeaders: ['Content-Type'],
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowMethods: ['GET', 'POST', 'PUT'],
+    credentials: true
 }));
 
 app.use(bodyParser());

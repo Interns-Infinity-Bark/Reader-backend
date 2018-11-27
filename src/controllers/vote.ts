@@ -5,6 +5,32 @@ import { jsonResp } from '../utils/stringUtil';
 import { now } from 'lodash';
 import User from '../models/User';
 
+export const addVote = async (ctx: any) => {
+    const user = await User.findOne({
+        where: {
+            id: ctx.session.user.id
+        }
+    });
+    if (!user) {
+        ctx.body = jsonResp('error', '用户不存在');
+        return;
+    }
+    const {title, content, isPrivate, password, anonymous, endAt} = ctx.body;
+    const vote = new Vote({
+        title: title,
+        content: content,
+        private: isPrivate,
+        password: password,
+        anonymous: anonymous,
+        endAt: endAt
+    });
+    await vote.save();
+    await user.$add('votes', vote);
+    ctx.body = jsonResp('ok', '发布投票成功', {
+        vote: vote
+    });
+};
+
 export const votes = async (ctx: any) => {
     const {title, page} = ctx.query;
     let votes = title ? await Vote.findAll({
@@ -24,7 +50,7 @@ export const votes = async (ctx: any) => {
 
 export const uvotes = async (ctx: any) => {
     const userId = ctx.params.id;
-    const page = ctx.query.page;
+    const {title, page} = ctx.query;
     const user = await User.findOne({
         where: {
             id: userId
@@ -37,6 +63,9 @@ export const uvotes = async (ctx: any) => {
     let votes = await user.$get('votes');
     if (!Array.isArray(votes)) {
         votes = [votes];
+    }
+    if (title) {
+        votes = votes.filter(vote => (vote.dataValues as Vote).title.includes(title));
     }
     if (page && isInt(page) && parseInt(page) > 0) {
         votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
@@ -141,6 +170,21 @@ export const enableVote = async (ctx: any) => {
         } else {
             ctx.body = jsonResp('error', '投票未被禁用');
         }
+    } else {
+        ctx.body = jsonResp('error', '投票不存在');
+    }
+};
+
+export const vote = async (ctx: any) => {
+    const vote = await Vote.findOne({
+        where: {
+            id: ctx.params.id
+        }
+    });
+    if (vote) {
+        ctx.body = jsonResp('ok', 'success', {
+            vote: vote
+        });
     } else {
         ctx.body = jsonResp('error', '投票不存在');
     }
