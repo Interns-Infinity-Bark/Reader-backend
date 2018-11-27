@@ -59,7 +59,8 @@ export const login = async (ctx: any) => {
     } else {
         const user = await User.findOne({
             where: {
-                email: email
+                email: email,
+                isActive: true
             }
         });
         if (user) {
