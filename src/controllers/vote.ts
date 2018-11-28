@@ -1,7 +1,7 @@
 import Vote from '../models/Vote';
 import { Op } from 'sequelize';
 import { isInt } from 'validator';
-import { jsonResp } from '../utils/stringUtil';
+import { jsonResp, md5 } from '../utils/stringUtil';
 import { now } from 'lodash';
 import User from '../models/User';
 
@@ -15,20 +15,42 @@ export const addVote = async (ctx: any) => {
         ctx.body = jsonResp('error', '用户不存在');
         return;
     }
-    const {title, content, isPrivate, password, anonymous, endAt} = ctx.body;
-    const vote = new Vote({
-        title: title,
-        content: content,
-        private: isPrivate,
-        password: password,
-        anonymous: anonymous,
-        endAt: endAt
-    });
-    await vote.save();
-    await user.$add('votes', vote);
-    ctx.body = jsonResp('ok', '发布投票成功', {
-        vote: vote
-    });
+    const {title, content, isPrivate, password, anonymous, endAt} = ctx.request.body;
+    if (!title) {
+        ctx.body = jsonResp('error', '标题不能为空');
+    } else if (!content) {
+        ctx.body = jsonResp('error', '内容不能为空');
+    } else if (isPrivate && !password) {
+        ctx.body = jsonResp('error', '密码不能为空');
+    } else if (!endAt) {
+        ctx.body = jsonResp('error', '结束时间不能为空');
+    } else {
+        let data;
+        try {
+            data = JSON.parse(content);
+            if (data.options.length < 1) {
+                ctx.body = jsonResp('error', '选项不能为空');
+                return;
+            }
+        } catch (e) {
+            console.log(e);
+            ctx.body = jsonResp('error', '选项格式错误');
+            return;
+        }
+        const vote = new Vote({
+            title: title,
+            content: data.options,
+            private: isPrivate,
+            password: md5(password),
+            anonymous: anonymous,
+            endAt: endAt
+        });
+        await vote.save();
+        await user.$add('votes', vote);
+        ctx.body = jsonResp('ok', '发布投票成功', {
+            vote: vote
+        });
+    }
 };
 
 export const votes = async (ctx: any) => {
@@ -182,6 +204,15 @@ export const vote = async (ctx: any) => {
         }
     });
     if (vote) {
+        if (vote.private) {
+            if (!ctx.request.body.password) {
+                ctx.body = jsonResp('error', '密码不能为空');
+                return;
+            } else if (vote.password !== md5(ctx.request.body.password)) {
+                ctx.body = jsonResp('error', '密码错误');
+                return;
+            }
+        }
         ctx.body = jsonResp('ok', 'success', {
             vote: vote
         });

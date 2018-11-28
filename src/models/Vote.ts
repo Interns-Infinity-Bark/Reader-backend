@@ -61,6 +61,7 @@ export default class Vote extends Model<Vote> {
             content: this.content,
             private: this.private,
             anonymous: this.anonymous,
+            isActive: this.isActive,
             endAt: this.endAt,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt
