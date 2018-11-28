@@ -18,5 +18,6 @@ export const routers = new Router()
     .get('/ongoingVotes', requireLogin, ongoingVotes)
     .get('/endedVotes', requireLogin, endedVotes)
     .get('/vote/:id', requireLogin, vote)
+    .post('/vote/:id', requireLogin, vote)
     .post('/vote', requireUser, requireManager, addVote)
 ;

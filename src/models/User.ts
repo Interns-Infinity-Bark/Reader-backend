@@ -53,6 +53,7 @@ export default class User extends Model<User> {
             email: this.email,
             nickname: this.nickname,
             role: this.role,
+            isActive: this.isActive,
             votes: this.votes,
             userVotes: this.userVotes,
             createdAt: this.createdAt,
