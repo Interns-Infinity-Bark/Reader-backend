@@ -28,7 +28,6 @@ export const addVote = async (ctx: any) => {
         let data;
         try {
             data = JSON.parse(content);
-            console.log(data);
             if (data.options.length < 1) {
                 ctx.body = jsonResp('error', '选项不能为空');
                 return;
