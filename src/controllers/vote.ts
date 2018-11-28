@@ -207,6 +207,7 @@ export const vote = async (ctx: any) => {
         if (vote.private) {
             if (!ctx.request.body.password) {
                 ctx.body = jsonResp('error', '密码不能为空');
+                return;
             } else if (vote.password !== md5(ctx.request.body.password)) {
                 ctx.body = jsonResp('error', '密码错误');
                 return;
