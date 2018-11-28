@@ -26,6 +26,7 @@ export const addVote = async (ctx: any) => {
         ctx.body = jsonResp('error', '结束时间不能为空');
     } else {
         let data;
+        console.log(content);
         try {
             data = JSON.parse(content);
             if (data.options.length < 1) {
