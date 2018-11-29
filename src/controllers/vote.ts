@@ -242,7 +242,7 @@ export const vote = async (ctx: any) => {
         }
     });
     if (vote) {
-        if (vote.private) {
+        if (vote.private && !(ctx.session.admin || (ctx.session.user.role === Role.MANAGER && ctx.session.user.id === vote.userId))) {
             if (!ctx.request.body.password) {
                 ctx.body = jsonResp('error', '密码不能为空');
                 return;
