@@ -94,7 +94,7 @@ app.keys = ['votee'];
 app.use(cors({
     origin: 'http://localhost:3000',
     allowHeaders: ['Content-Type'],
-    allowMethods: ['GET', 'POST', 'PUT'],
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
 

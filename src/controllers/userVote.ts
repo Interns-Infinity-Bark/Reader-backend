@@ -32,8 +32,8 @@ export const addUserVote = async (ctx: any) => {
     if (await UserVote.findOne({
         where: {
             [Op.and]: {
-                userId: ctx.session.user.id,
-                voteId: voteId
+                userId: user.id,
+                voteId: vote.id
             }
         }
     })) {

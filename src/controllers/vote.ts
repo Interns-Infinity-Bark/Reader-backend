@@ -4,6 +4,7 @@ import { isInt } from 'validator';
 import { jsonResp, md5 } from '../utils/stringUtil';
 import { now } from 'lodash';
 import User, { Role } from '../models/User';
+import UserVote from '../models/UserVote';
 
 export const addVote = async (ctx: any) => {
     const user = await User.findOne({
@@ -207,8 +208,19 @@ export const vote = async (ctx: any) => {
                 return;
             }
         }
+        // @ts-ignore
+        const result: number[] = new Array(vote.content.options.length);
+        result.fill(0);
+        (await UserVote.findAll({
+            where: {
+                voteId: vote.id
+            }
+        })).map(userVote => {
+            result[userVote.option]++;
+        });
         ctx.body = jsonResp('ok', 'success', {
-            vote: vote
+            vote: vote,
+            result: result
         });
     } else {
         ctx.body = jsonResp('error', '投票不存在');
