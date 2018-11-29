@@ -17,14 +17,18 @@ export default class UserVote extends Model<UserVote> {
     @Column
     userId: number;
 
-    @BelongsTo(() => User)
+    @BelongsTo(() => User, {
+        onDelete: 'CASCADE'
+    })
     user: User;
 
     @ForeignKey(() => Vote)
     @Column
     voteId: number;
 
-    @BelongsTo(() => Vote)
+    @BelongsTo(() => Vote, {
+        onDelete: 'CASCADE'
+    })
     vote: Vote;
 
     @AllowNull(false)

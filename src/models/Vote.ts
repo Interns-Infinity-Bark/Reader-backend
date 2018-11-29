@@ -18,14 +18,15 @@ export default class Vote extends Model<Vote> {
     @Column
     userId: number;
 
-    @BelongsTo(() => User)
+    @BelongsTo(() => User, {
+        onDelete: 'CASCADE'
+    })
     user: User;
 
     @AllowNull(false)
     @Column(DataType.TEXT)
     title: string;
 
-    // todo
     @AllowNull(false)
     @Column(DataType.JSON)
     content: object;

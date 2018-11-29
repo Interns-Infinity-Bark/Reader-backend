@@ -21,7 +21,6 @@ const sequelize = new Sequelize({
         force: false
     });
 
-    // todo
     // const qaqrz = new Admin({
     //     username: 'QAQrz',
     //     password: md5('QAQrz'),
@@ -42,51 +41,6 @@ const sequelize = new Sequelize({
     //     nickname: 'Ninaye'
     // });
     // await ninaye.save();
-    //
-    // const ninaye1 = new User({
-    //     email: '1@q.com',
-    //     password: md5('Ninaye'),
-    //     nickname: 'Ninaye1',
-    //     role: Role.MANAGER
-    // });
-    // await ninaye1.save();
-    // const ninaye2 = new User({
-    //     email: '2@q.com',
-    //     password: md5('Ninaye'),
-    //     nickname: 'Ninaye2'
-    // });
-    // await ninaye2.save();
-    // const ninaye3 = new User({
-    //     email: '3@q.com',
-    //     password: md5('Ninaye'),
-    //     nickname: 'Ninaye3'
-    // });
-    // await ninaye3.save();
-    //
-    // const option = {
-    //     option: 'test'
-    // };
-    // const vote1 = new Vote({
-    //     title: 'vote1',
-    //     content: option,
-    //     endAt: Date.parse('2019-01-01 00:00:00')
-    // });
-    // await vote1.save();
-    // await ninaye1.$add('votes', vote1);
-    // const vote2 = new Vote({
-    //     title: 'vote2',
-    //     content: option,
-    //     endAt: Date.parse('2018-01-01 00:00:00')
-    // });
-    // await vote2.save();
-    // await ninaye2.$add('votes', vote2);
-    // const vote3 = new Vote({
-    //     title: 'vote3',
-    //     content: option,
-    //     endAt: now()
-    // });
-    // await vote3.save();
-    // await ninaye3.$add('votes', vote3);
 })();
 
 app.keys = ['votee'];
