@@ -80,7 +80,7 @@ export const modifyVote = async (ctx: any) => {
         ctx.body = jsonResp('error', '结束时间不能早于当前时间');
     } else {
         vote.title = title;
-        vote.private = isPrivate;
+        vote.private = isPrivate ? isPrivate : false;
         vote.password = password;
         vote.anonymous = anonymous ? anonymous : false;
         vote.endAt = new Date(endAt);
