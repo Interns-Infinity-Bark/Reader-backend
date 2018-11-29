@@ -26,6 +26,10 @@ export const addVote = async (ctx: any) => {
         ctx.body = jsonResp('error', '密码不能为空');
     } else if (!endAt) {
         ctx.body = jsonResp('error', '结束时间不能为空');
+    } else if (!Date.parse(endAt)) {
+        ctx.body = jsonResp('error', '结束时间格式错误');
+    } else if (Date.parse(endAt) <= now()) {
+        ctx.body = jsonResp('error', '结束时间不能早于当前时间');
     } else {
         const vote = new Vote({
             title: title,
@@ -33,7 +37,7 @@ export const addVote = async (ctx: any) => {
             private: isPrivate,
             password: md5(password),
             anonymous: anonymous,
-            endAt: endAt
+            endAt: Date.parse(endAt)
         });
         await vote.save();
         await user.$add('votes', vote);
