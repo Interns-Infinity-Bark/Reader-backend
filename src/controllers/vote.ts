@@ -20,30 +20,24 @@ export const addVote = async (ctx: any) => {
         ctx.body = jsonResp('error', '标题不能为空');
     } else if (!content) {
         ctx.body = jsonResp('error', '内容不能为空');
+    } else if (!content.options) {
+        ctx.body = jsonResp('error', '选项不能为空');
     } else if (isPrivate && !password) {
         ctx.body = jsonResp('error', '密码不能为空');
     } else if (!endAt) {
         ctx.body = jsonResp('error', '结束时间不能为空');
+    } else if (!Date.parse(endAt)) {
+        ctx.body = jsonResp('error', '结束时间格式错误');
+    } else if (Date.parse(endAt) <= now()) {
+        ctx.body = jsonResp('error', '结束时间不能早于当前时间');
     } else {
-        let data;
-        try {
-            data = JSON.parse(content);
-            if (data.options.length < 1) {
-                ctx.body = jsonResp('error', '选项不能为空');
-                return;
-            }
-        } catch (e) {
-            console.log(e);
-            ctx.body = jsonResp('error', '选项格式错误');
-            return;
-        }
         const vote = new Vote({
             title: title,
-            content: data.options,
+            content: content,
             private: isPrivate,
             password: md5(password),
             anonymous: anonymous,
-            endAt: endAt
+            endAt: Date.parse(endAt)
         });
         await vote.save();
         await user.$add('votes', vote);
