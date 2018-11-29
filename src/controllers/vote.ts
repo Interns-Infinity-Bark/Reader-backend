@@ -81,7 +81,7 @@ export const modifyVote = async (ctx: any) => {
     } else {
         vote.title = title;
         vote.private = isPrivate ? isPrivate : false;
-        vote.password = password;
+        vote.password = md5(password);
         vote.anonymous = anonymous ? anonymous : false;
         vote.endAt = new Date(endAt);
         await vote.save();
