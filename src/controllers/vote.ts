@@ -3,7 +3,7 @@ import { Op } from 'sequelize';
 import { isInt } from 'validator';
 import { jsonResp, md5 } from '../utils/stringUtil';
 import { now } from 'lodash';
-import User from '../models/User';
+import User, { Role } from '../models/User';
 
 export const addVote = async (ctx: any) => {
     const user = await User.findOne({
@@ -210,6 +210,24 @@ export const vote = async (ctx: any) => {
         ctx.body = jsonResp('ok', 'success', {
             vote: vote
         });
+    } else {
+        ctx.body = jsonResp('error', '投票不存在');
+    }
+};
+
+export const deleteVote = async (ctx: any) => {
+    const vote = await Vote.findOne({
+        where: {
+            id: ctx.params.id
+        }
+    });
+    if (vote) {
+        if (ctx.session.admin || (ctx.session.user.role === Role.MANAGER && vote.userId === ctx.session.user.id)) {
+            await vote.destroy();
+            ctx.body = jsonResp('ok', '删除投票成功');
+        } else {
+            ctx.body = jsonResp('error', '权限不足');
+        }
     } else {
         ctx.body = jsonResp('error', '投票不存在');
     }
