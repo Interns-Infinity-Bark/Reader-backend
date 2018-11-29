@@ -58,6 +58,7 @@ export default class Vote extends Model<Vote> {
         return {
             id: this.id,
             user: this.userId,
+            userNickname: this.user.nickname,
             title: this.title,
             content: this.content,
             isPrivate: this.private,
