@@ -187,6 +187,28 @@ export const endedVotes = async (ctx: any) => {
     });
 };
 
+export const myVotes = async (ctx: any) => {
+    const {title, page} = ctx.query;
+    const userVotes = await UserVote.findAll({
+        where: {
+            userId: ctx.session.user.id
+        }
+    });
+    let votes = [];
+    for (let i = 0; i < userVotes.length; i++) {
+        votes.push(await userVotes[i].$get('vote'));
+    }
+    if (title) {
+        votes = votes.filter(vote => (vote as Vote).title.includes(title));
+    }
+    if (page && isInt(page) && parseInt(page) > 0) {
+        votes = votes.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    }
+    ctx.body = jsonResp('ok', 'success', {
+        votes: votes
+    });
+};
+
 export const disableVote = async (ctx: any) => {
     const voteId = ctx.request.body.voteId;
     if (!voteId) {
