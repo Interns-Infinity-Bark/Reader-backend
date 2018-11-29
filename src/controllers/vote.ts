@@ -273,6 +273,7 @@ export const vote = async (ctx: any) => {
                 return;
             }
         }
+        const user = (await vote.$get('user')) as User;
         // @ts-ignore
         const result: number[] = new Array(vote.content.options.length);
         result.fill(0);
@@ -285,6 +286,7 @@ export const vote = async (ctx: any) => {
         });
         ctx.body = jsonResp('ok', 'success', {
             vote: vote,
+            userNickname: user.nickname,
             result: result
         });
     } else {
