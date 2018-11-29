@@ -48,6 +48,49 @@ export const addVote = async (ctx: any) => {
     }
 };
 
+export const modifyVote = async (ctx: any) => {
+    const user = await User.findOne({
+        where: {
+            id: ctx.session.user.id
+        }
+    });
+    if (!user) {
+        ctx.body = jsonResp('error', '用户不存在');
+        return;
+    }
+    const vote = await Vote.findOne({
+        where: {
+            id: ctx.params.id
+        }
+    });
+    if (!vote) {
+        ctx.body = jsonResp('error', '投票不存在');
+        return;
+    }
+    const {title, isPrivate, password, anonymous, endAt} = ctx.request.body;
+    if (!title) {
+        ctx.body = jsonResp('error', '标题不能为空');
+    } else if (isPrivate && !password) {
+        ctx.body = jsonResp('error', '密码不能为空');
+    } else if (!endAt) {
+        ctx.body = jsonResp('error', '结束时间不能为空');
+    } else if (!Date.parse(endAt)) {
+        ctx.body = jsonResp('error', '结束时间格式错误');
+    } else if (Date.parse(endAt) <= now()) {
+        ctx.body = jsonResp('error', '结束时间不能早于当前时间');
+    } else {
+        vote.title = title;
+        vote.private = isPrivate;
+        vote.password = password;
+        vote.anonymous = anonymous ? anonymous : false;
+        vote.endAt = new Date(endAt);
+        await vote.save();
+        ctx.body = jsonResp('ok', '修改投票成功', {
+            vote: vote
+        });
+    }
+};
+
 export const votes = async (ctx: any) => {
     const {title, page} = ctx.query;
     let votes = title ? await Vote.findAll({
