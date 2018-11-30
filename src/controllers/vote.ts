@@ -294,6 +294,34 @@ export const vote = async (ctx: any) => {
     }
 };
 
+export const result = async (ctx: any) => {
+    const vote = await Vote.findOne({
+        where: {
+            id: ctx.params.id
+        }
+    });
+    if (vote) {
+        const user = (await vote.$get('user')) as User;
+        // @ts-ignore
+        const result: number[] = new Array(vote.content.options.length);
+        result.fill(0);
+        (await UserVote.findAll({
+            where: {
+                voteId: vote.id
+            }
+        })).map(userVote => {
+            result[userVote.option]++;
+        });
+        ctx.body = jsonResp('ok', 'success', {
+            vote: vote,
+            userNickname: user.nickname,
+            result: result
+        });
+    } else {
+        ctx.body = jsonResp('error', '投票不存在');
+    }
+};
+
 export const deleteVote = async (ctx: any) => {
     const vote = await Vote.findOne({
         where: {
