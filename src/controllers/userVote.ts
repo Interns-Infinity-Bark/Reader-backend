@@ -45,7 +45,7 @@ export const addUserVote = async (ctx: any) => {
         return;
     }
     // @ts-ignore
-    if (!isInt(option) || option < 0 || option >= vote.content.options.length) {
+    if (typeof option !== number || option < 0 || option >= vote.content.options.length) {
         ctx.body = jsonResp('error', '投票选项格式错误');
         return;
     }
