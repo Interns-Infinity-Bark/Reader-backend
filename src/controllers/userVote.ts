@@ -3,7 +3,6 @@ import { jsonResp } from '../utils/stringUtil';
 import Vote from '../models/Vote';
 import { Op } from 'sequelize';
 import UserVote from '../models/UserVote';
-import { isInt } from 'validator';
 
 export const addUserVote = async (ctx: any) => {
     const user = await User.findOne({
