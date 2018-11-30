@@ -45,12 +45,12 @@ export const addUserVote = async (ctx: any) => {
         return;
     }
     // @ts-ignore
-    if (!isInt(option) || parseInt(option) < 0 || parseInt(option) >= vote.content.options.length) {
+    if (!isInt(option) || option < 0 || option >= vote.content.options.length) {
         ctx.body = jsonResp('error', '投票选项格式错误');
         return;
     }
     const userVote = new UserVote({
-        option: parseInt(option)
+        option: option
     });
     await userVote.save();
     await user.$add('userVotes', userVote);
