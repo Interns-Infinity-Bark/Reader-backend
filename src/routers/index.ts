@@ -3,7 +3,7 @@ import * as admin from './admin';
 import { user, login, logout, modifyNickname, modifyPassword, register } from '../controllers/user';
 import { requireLogin, requireManager, requireUser } from '../controllers';
 import {
-    votes, ongoingVotes, endedVotes, uvotes, addVote, vote, deleteVote, modifyVote, myVotes
+    votes, ongoingVotes, endedVotes, uvotes, addVote, vote, deleteVote, modifyVote, myVotes, result
 } from '../controllers/vote';
 import { addUserVote } from '../controllers/userVote';
 
@@ -21,6 +21,7 @@ export const routers = new Router()
     .get('/ongoingVotes', requireLogin, ongoingVotes)
     .get('/endedVotes', requireLogin, endedVotes)
     .get('/vote/:id', requireLogin, vote)
+    .get('/result/:id', requireLogin, result)
     .get('/myVotes', requireUser, myVotes)
     .put('/vote/:id', requireUser, requireManager, modifyVote)
     .delete('/vote/:id', requireLogin, deleteVote)

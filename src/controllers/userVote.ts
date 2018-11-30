@@ -3,7 +3,6 @@ import { jsonResp } from '../utils/stringUtil';
 import Vote from '../models/Vote';
 import { Op } from 'sequelize';
 import UserVote from '../models/UserVote';
-import { isInt } from 'validator';
 
 export const addUserVote = async (ctx: any) => {
     const user = await User.findOne({
@@ -45,12 +44,12 @@ export const addUserVote = async (ctx: any) => {
         return;
     }
     // @ts-ignore
-    if (!isInt(option) || parseInt(option) < 0 || parseInt(option) >= vote.content.options.length) {
+    if (typeof option !== 'number' || option < 0 || option >= vote.content.options.length) {
         ctx.body = jsonResp('error', '投票选项格式错误');
         return;
     }
     const userVote = new UserVote({
-        option: parseInt(option)
+        option: option
     });
     await userVote.save();
     await user.$add('userVotes', userVote);
