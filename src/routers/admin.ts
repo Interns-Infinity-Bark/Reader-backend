@@ -2,7 +2,7 @@ import * as Router from 'koa-router';
 import { admin, login, logout, modifyNickname, modifyPassword } from '../controllers/admin';
 import { requireAdmin } from '../controllers';
 import { users, disableUser, enableUser, enableManager, disableManager } from '../controllers/user';
-import { disableVote, enableVote } from '../controllers/vote';
+import { adminVote, disableVote, enableVote } from '../controllers/vote';
 
 export const router = new Router()
     .post('/login', login)
@@ -17,4 +17,5 @@ export const router = new Router()
     .put('/enableManager', requireAdmin, enableManager)
     .put('/disableVote', requireAdmin, disableVote)
     .put('/enableVote', requireAdmin, enableVote)
+    .get('/vote/:id', requireAdmin, adminVote)
 ;
