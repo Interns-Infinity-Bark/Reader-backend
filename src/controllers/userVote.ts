@@ -39,7 +39,7 @@ export const addUserVote = async (ctx: any) => {
         ctx.body = jsonResp('error', '不能重复投票');
         return;
     }
-    if (!option) {
+    if (option === undefined) {
         ctx.body = jsonResp('error', '投票选项不能为空');
         return;
     }
