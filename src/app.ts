@@ -46,7 +46,7 @@ const sequelize = new Sequelize({
 app.keys = ['votee'];
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://123.206.15.249',
     allowHeaders: ['Content-Type'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
