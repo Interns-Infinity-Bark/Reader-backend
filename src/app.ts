@@ -6,6 +6,8 @@ import { routers } from './routers';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
 import * as cors from 'koa2-cors';
+import Admin from './models/Admin';
+import { md5 } from './utils/stringUtil';
 
 const app = new Koa();
 
@@ -18,35 +20,32 @@ const sequelize = new Sequelize({
 
 (async () => {
     await sequelize.sync({
-        force: false
+        force: true
     });
 
-    // const qaqrz = new Admin({
-    //     username: 'QAQrz',
-    //     password: md5('QAQrz'),
-    //     nickname: 'QAQrz'
-    // });
-    // await qaqrz.save();
-    //
-    // const umr = new Admin({
-    //     username: 'UMR',
-    //     password: md5('UMR'),
-    //     nickname: 'UMR'
-    // });
-    // await umr.save();
-    //
-    // const ninaye = new Admin({
-    //     username: 'Ninaye',
-    //     password: md5('Ninaye'),
-    //     nickname: 'Ninaye'
-    // });
-    // await ninaye.save();
+    const qaqrz = new Admin({
+        username: 'QAQrz',
+        password: md5('QAQrz')
+    });
+    await qaqrz.save();
+
+    const umr = new Admin({
+        username: 'UMR',
+        password: md5('UMR')
+    });
+    await umr.save();
+
+    const ninaye = new Admin({
+        username: 'Ninaye',
+        password: md5('Ninaye')
+    });
+    await ninaye.save();
 })();
 
-app.keys = ['votee'];
+app.keys = ['Reader'];
 
 app.use(cors({
-    origin: 'http://123.206.15.249',
+    origin: '*', // https://rebooks.jk1507.cn
     allowHeaders: ['Content-Type'],
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true

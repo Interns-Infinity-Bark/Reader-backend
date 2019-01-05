@@ -1,5 +1,4 @@
 import { jsonResp } from '../utils/stringUtil';
-import { Role } from '../models/User';
 
 export const requireLogin = async (ctx: any, next: any) => {
     if (ctx.session.user || ctx.session.admin) {
@@ -22,13 +21,5 @@ export const requireUser = async (ctx: any, next: any) => {
         await next();
     } else {
         ctx.body = jsonResp('error', '请先登录');
-    }
-};
-
-export const requireManager = async (ctx: any, next: any) => {
-    if (Role.MANAGER === ctx.session.user.role) {
-        await next();
-    } else {
-        ctx.body = jsonResp('error', '权限不足');
     }
 };

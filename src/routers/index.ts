@@ -1,11 +1,10 @@
 import * as Router from 'koa-router';
 import * as admin from './admin';
-import { user, login, logout, modifyNickname, modifyPassword, register } from '../controllers/user';
-import { requireLogin, requireManager, requireUser } from '../controllers';
-import {
-    votes, ongoingVotes, endedVotes, uvotes, addVote, vote, deleteVote, modifyVote, myVotes, result
-} from '../controllers/vote';
-import { addUserVote } from '../controllers/userVote';
+import { user, login, logout, modifyPassword, register } from '../controllers/user';
+import { requireLogin, requireUser } from '../controllers';
+import { books, book } from '../controllers/book';
+import { addComment, comments, userComments } from '../controllers/comment';
+import { chapter, chapters } from '../controllers/chapter';
 
 export const routers = new Router()
     .use('/admin', admin.router.routes(), admin.router.allowedMethods())
@@ -13,19 +12,13 @@ export const routers = new Router()
     .post('/register', register)
     .post('/login', login)
     .get('/logout', requireUser, logout)
-    .put('/nickname', requireUser, modifyNickname)
     .put('/password', requireUser, modifyPassword)
     .get('/user/:id', requireLogin, user)
-    .get('/votes', requireLogin, votes)
-    .get('/user/:id/votes', requireLogin, uvotes)
-    .get('/ongoingVotes', requireLogin, ongoingVotes)
-    .get('/endedVotes', requireLogin, endedVotes)
-    .get('/vote/:id', requireUser, vote)
-    .get('/result/:id', requireLogin, result)
-    .get('/myVotes', requireUser, myVotes)
-    .put('/vote/:id', requireUser, requireManager, modifyVote)
-    .delete('/vote/:id', requireLogin, deleteVote)
-    .post('/vote/:id', requireLogin, vote)
-    .post('/vote', requireUser, requireManager, addVote)
-    .post('/userVote', requireUser, addUserVote)
+    .get('/books', books)
+    .get('/book/:id', book)
+    .get('/book/:id/chapters', chapters)
+    .get('/chapter/:id', chapter)
+    .get('/chapter/:id/comments', comments)
+    .get('/user/:id/comments', requireUser, userComments)
+    .post('/comment', requireUser, addComment)
 ;

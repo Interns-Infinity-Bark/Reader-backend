@@ -1,8 +1,6 @@
 import { Table, Column, Model, PrimaryKey, AutoIncrement, Unique, AllowNull } from 'sequelize-typescript';
 
-@Table({
-    timestamps: true
-})
+@Table
 export default class Admin extends Model<Admin> {
     @AutoIncrement
     @PrimaryKey
@@ -18,18 +16,10 @@ export default class Admin extends Model<Admin> {
     @Column
     password: string;
 
-    @AllowNull(false)
-    @Unique
-    @Column
-    nickname: string;
-
     toJSON() {
         return {
             id: this.id,
-            username: this.username,
-            nickname: this.nickname,
-            createdAt: this.createdAt,
-            updatedAt: this.updatedAt
+            username: this.username
         };
     }
 }

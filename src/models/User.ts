@@ -1,17 +1,9 @@
 import {
-    Table, Column, Model, PrimaryKey, IsEmail, AutoIncrement, DataType, AllowNull, Unique, Default, HasMany
+    Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull, Unique, Default, HasMany
 } from 'sequelize-typescript';
-import Vote from './Vote';
-import UserVote from './UserVote';
+import Comment from './Comment';
 
-export enum Role {
-    USER = 'user',
-    MANAGER = 'manager'
-}
-
-@Table({
-    timestamps: true
-})
+@Table
 export default class User extends Model<User> {
     @AutoIncrement
     @PrimaryKey
@@ -19,45 +11,27 @@ export default class User extends Model<User> {
     id: number;
 
     @AllowNull(false)
-    @IsEmail
     @Unique
     @Column
-    email: string;
+    username: string;
 
     @AllowNull(false)
     @Column
     password: string;
 
-    @AllowNull(false)
-    @Unique
-    @Column
-    nickname: string;
-
-    @Default(Role.USER)
-    @Column(DataType.ENUM(Role.USER, Role.MANAGER))
-    role: Role;
-
     @Default(true)
     @Column
     isActive: boolean;
 
-    @HasMany(() => Vote)
-    votes: Vote[];
-
-    @HasMany(() => UserVote)
-    userVotes: UserVote[];
+    @HasMany(() => Comment)
+    comments: Comment[];
 
     toJSON() {
         return {
             id: this.id,
-            email: this.email,
-            nickname: this.nickname,
-            role: this.role,
+            username: this.username,
             isActive: this.isActive,
-            votes: this.votes,
-            userVotes: this.userVotes,
-            createdAt: this.createdAt,
-            updatedAt: this.updatedAt
+            comments: this.comments
         };
     }
 }

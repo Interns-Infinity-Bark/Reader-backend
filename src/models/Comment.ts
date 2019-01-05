@@ -1,13 +1,13 @@
 import {
-    Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull, ForeignKey, BelongsTo
+    Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull, ForeignKey, BelongsTo, DataType
 } from 'sequelize-typescript';
+import Chapter from './Chapter';
 import User from './User';
-import Vote from './Vote';
 
 @Table({
     timestamps: true
 })
-export default class UserVote extends Model<UserVote> {
+export default class Comment extends Model<Comment> {
     @AutoIncrement
     @PrimaryKey
     @Column
@@ -22,25 +22,25 @@ export default class UserVote extends Model<UserVote> {
     })
     user: User;
 
-    @ForeignKey(() => Vote)
+    @ForeignKey(() => Chapter)
     @Column
-    voteId: number;
+    chapterId: string;
 
-    @BelongsTo(() => Vote, {
+    @BelongsTo(() => Chapter, {
         onDelete: 'CASCADE'
     })
-    vote: Vote;
+    chapter: Chapter;
 
     @AllowNull(false)
-    @Column
-    option: number;
+    @Column(DataType.TEXT)
+    content: string;
 
     toJSON() {
         return {
             id: this.id,
             user: this.userId,
-            vote: this.voteId,
-            option: this.option,
+            chapter: this.chapterId,
+            content: this.content,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt
         };

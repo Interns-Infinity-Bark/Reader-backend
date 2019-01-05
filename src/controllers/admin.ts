@@ -6,7 +6,7 @@ export const login = async (ctx: any) => {
         ctx.body = jsonResp('error', '已登录');
         return;
     }
-    const {username, password} = ctx.request.body;
+    const { username, password } = ctx.request.body;
     if (!username) {
         ctx.body = jsonResp('error', '用户名不能为空');
     } else if (!password) {
@@ -37,35 +37,8 @@ export const logout = async (ctx: any) => {
     ctx.body = jsonResp('ok', '登出成功');
 };
 
-export const modifyNickname = async (ctx: any) => {
-    const nickname = ctx.request.body.nickname;
-    if (!nickname) {
-        ctx.body = jsonResp('error', '昵称不能为空');
-    } else if (nickname === ctx.session.admin.nickname) {
-        ctx.body = jsonResp('error', '昵称未改动');
-    } else if (await Admin.findOne({
-        where: {
-            nickname: nickname
-        }
-    })) {
-        ctx.body = jsonResp('error', '昵称已存在');
-    } else {
-        const admin = await Admin.findOne({
-            where: {
-                id: ctx.session.admin.id
-            }
-        });
-        admin.nickname = nickname;
-        await admin.save();
-        ctx.session.admin = admin;
-        ctx.body = jsonResp('ok', '昵称修改成功', {
-            user: admin
-        });
-    }
-};
-
 export const modifyPassword = async (ctx: any) => {
-    const {oldPassword, password, confirmPassword} = ctx.request.body;
+    const { oldPassword, password, confirmPassword } = ctx.request.body;
     const admin = await Admin.findOne({
         where: {
             id: ctx.session.admin.id
