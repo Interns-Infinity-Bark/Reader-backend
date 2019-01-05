@@ -7,6 +7,12 @@ export const addBook = async (ctx: any) => {
     const { id, title, author, category, wordCount, score, cover, introduction } = ctx.request.body;
     if (!id) {
         ctx.body = jsonResp('error', 'id 不能为空');
+    } else if (await Book.findOne({
+        where: {
+            id
+        }
+    })) {
+        ctx.body = jsonResp('error', '图书已存在');
     } else if (!title) {
         ctx.body = jsonResp('error', '标题不能为空');
     } else if (!author) {

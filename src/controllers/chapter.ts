@@ -9,6 +9,13 @@ export const addChapter = async (ctx: any) => {
         ctx.body = jsonResp('error', 'id 不能为空');
         return;
     }
+    if (await Chapter.findOne({
+        where: {
+            id
+        }
+    })) {
+        ctx.body = jsonResp('error', '章节已存在');
+    }
     if (!bookId) {
         ctx.body = jsonResp('error', 'bookId 不能为空');
         return;
