@@ -39,7 +39,6 @@ export const addChapter = async (ctx: any) => {
     }
     const chapter = new Chapter({
         id: id,
-        bookId: bookId,
         title: title,
         content: content,
         isVip: isVip
@@ -53,7 +52,7 @@ export const addChapter = async (ctx: any) => {
 
 export const chapters = async (ctx: any) => {
     const bookId = ctx.params.id;
-    const page = ctx.query;
+    const page = ctx.query.page;
     const book = await Book.findOne({
         where: {
             id: bookId

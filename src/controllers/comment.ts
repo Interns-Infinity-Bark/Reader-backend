@@ -41,7 +41,7 @@ export const addComment = async (ctx: any) => {
 
 export const comments = async (ctx: any) => {
     const chapterId = ctx.params.id;
-    const page = ctx.query;
+    const page = ctx.query.page;
     const chapter = await Chapter.findOne({
         where: {
             id: chapterId
@@ -64,7 +64,7 @@ export const comments = async (ctx: any) => {
 };
 
 export const userComments = async (ctx: any) => {
-    const page = ctx.query;
+    const page = ctx.query.page;
     let comments = await Comment.findAll({
         where: {
             userId: ctx.session.user.id
