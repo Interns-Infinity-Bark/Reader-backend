@@ -34,9 +34,7 @@ export const addComment = async (ctx: any) => {
     await comment.save();
     await user.$add('comments', comment);
     await chapter.$add('comments', comment);
-    ctx.body = jsonResp('ok', '评论成功', {
-        comment: comment
-    });
+    ctx.body = jsonResp('ok', '评论成功');
 };
 
 export const comments = async (ctx: any) => {
