@@ -39,6 +39,7 @@ export default class Comment extends Model<Comment> {
         return {
             id: this.id,
             user: this.userId,
+            username: this.user.username,
             chapter: this.chapterId,
             content: this.content,
             createdAt: this.createdAt,
