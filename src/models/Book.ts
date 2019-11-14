@@ -1,10 +1,11 @@
-import { Table, Column, Model, PrimaryKey, DataType, AllowNull, HasMany } from 'sequelize-typescript';
+import { AllowNull, Column, DataType, HasMany, Model, PrimaryKey, Table } from 'sequelize-typescript';
 import Chapter from './Chapter';
 
 @Table({
+    freezeTableName: true,
     timestamps: true
 })
-export default class Book extends Model<Book> {
+class Book extends Model<Book> {
     @AllowNull(false)
     @PrimaryKey
     @Column
@@ -57,3 +58,5 @@ export default class Book extends Model<Book> {
         };
     }
 }
+
+export default Book;

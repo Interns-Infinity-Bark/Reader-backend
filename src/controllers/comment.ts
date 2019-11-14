@@ -1,8 +1,8 @@
-import User from '../models/User';
-import { jsonResp } from '../utils/stringUtil';
+import { isInt } from 'validator';
 import Chapter from '../models/Chapter';
 import Comment from '../models/Comment';
-import { isInt } from 'validator';
+import User from '../models/User';
+import { jsonResp } from '../utils/stringUtil';
 
 export const addComment = async (ctx: any) => {
     const user = await User.findOne({
@@ -55,8 +55,8 @@ export const comments = async (ctx: any) => {
     if (!Array.isArray(comments)) {
         comments = [comments];
     }
-    if (page && isInt(page) && parseInt(page) > 0) {
-        comments = comments.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    if (page && isInt(page) && parseInt(page, 10) > 0) {
+        comments = comments.slice((parseInt(page, 10) - 1) * 10, parseInt(page, 10) * 10 - 1);
     }
     ctx.body = jsonResp('ok', 'success', {
         comments: comments
@@ -70,8 +70,8 @@ export const userComments = async (ctx: any) => {
             userId: ctx.session.user.id
         }
     });
-    if (page && isInt(page) && parseInt(page) > 0) {
-        comments = comments.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    if (page && isInt(page) && parseInt(page, 10) > 0) {
+        comments = comments.slice((parseInt(page, 10) - 1) * 10, parseInt(page, 10) * 10 - 1);
     }
     ctx.body = jsonResp('ok', 'success', {
         comments: comments

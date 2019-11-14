@@ -1,13 +1,22 @@
 import {
-    Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull, ForeignKey, BelongsTo, DataType
+    AllowNull,
+    AutoIncrement,
+    BelongsTo,
+    Column,
+    DataType,
+    ForeignKey,
+    Model,
+    PrimaryKey,
+    Table
 } from 'sequelize-typescript';
 import Chapter from './Chapter';
 import User from './User';
 
 @Table({
+    freezeTableName: true,
     timestamps: true
 })
-export default class Comment extends Model<Comment> {
+class Comment extends Model<Comment> {
     @AutoIncrement
     @PrimaryKey
     @Column
@@ -46,3 +55,5 @@ export default class Comment extends Model<Comment> {
         };
     }
 }
+
+export default Comment;

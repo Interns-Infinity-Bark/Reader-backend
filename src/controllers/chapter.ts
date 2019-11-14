@@ -1,7 +1,7 @@
-import Book from '../models/Book';
 import { isInt } from 'validator';
-import { jsonResp } from '../utils/stringUtil';
+import Book from '../models/Book';
 import Chapter from '../models/Chapter';
+import { jsonResp } from '../utils/stringUtil';
 
 export const addChapter = async (ctx: any) => {
     const { id, bookId, title, content, isVip } = ctx.request.body;
@@ -66,8 +66,8 @@ export const chapters = async (ctx: any) => {
     if (!Array.isArray(chapters)) {
         chapters = [chapters];
     }
-    if (page && isInt(page) && parseInt(page) > 0) {
-        chapters = chapters.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    if (page && isInt(page) && parseInt(page, 10) > 0) {
+        chapters = chapters.slice((parseInt(page, 10) - 1) * 10, parseInt(page, 10) * 10 - 1);
     }
     ctx.body = jsonResp('ok', 'success', {
         chapters: chapters

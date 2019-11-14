@@ -1,10 +1,20 @@
 import {
-    Table, Column, Model, PrimaryKey, AutoIncrement, AllowNull, Unique, Default, HasMany
+    AllowNull,
+    AutoIncrement,
+    Column,
+    Default,
+    HasMany,
+    Model,
+    PrimaryKey,
+    Table,
+    Unique
 } from 'sequelize-typescript';
 import Comment from './Comment';
 
-@Table
-export default class User extends Model<User> {
+@Table({
+    freezeTableName: true
+})
+class User extends Model<User> {
     @AutoIncrement
     @PrimaryKey
     @Column
@@ -35,3 +45,5 @@ export default class User extends Model<User> {
         };
     }
 }
+
+export default User;

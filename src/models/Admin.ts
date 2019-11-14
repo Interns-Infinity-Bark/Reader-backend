@@ -1,7 +1,9 @@
-import { Table, Column, Model, PrimaryKey, AutoIncrement, Unique, AllowNull } from 'sequelize-typescript';
+import { AllowNull, AutoIncrement, Column, Model, PrimaryKey, Table, Unique } from 'sequelize-typescript';
 
-@Table
-export default class Admin extends Model<Admin> {
+@Table({
+    freezeTableName: true
+})
+class Admin extends Model<Admin> {
     @AutoIncrement
     @PrimaryKey
     @Column
@@ -23,3 +25,5 @@ export default class Admin extends Model<Admin> {
         };
     }
 }
+
+export default Admin;

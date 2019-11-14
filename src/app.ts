@@ -1,18 +1,20 @@
-import { config } from './config';
-import { Sequelize } from 'sequelize-typescript';
 import * as Koa from 'koa';
-import * as path from 'path';
-import { routers } from './routers';
 import * as bodyParser from 'koa-bodyparser';
 import * as session from 'koa-session';
 import * as cors from 'koa2-cors';
+import * as path from 'path';
+import { Sequelize } from 'sequelize-typescript';
+import { config } from './config';
+import { routers } from './routers';
 
 const app = new Koa();
 
 const sequelize = new Sequelize({
     ...config,
     modelPaths: [path.join(__dirname, '/models')],
-    operatorsAliases: false,
+    define: {
+        timestamps: false
+    },
     timezone: '+08:00'
 });
 

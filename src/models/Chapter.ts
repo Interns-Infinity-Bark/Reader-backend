@@ -1,11 +1,22 @@
 import {
-    Table, Column, Model, PrimaryKey, AllowNull, ForeignKey, BelongsTo, DataType, HasMany, Default
+    AllowNull,
+    BelongsTo,
+    Column,
+    DataType,
+    Default,
+    ForeignKey,
+    HasMany,
+    Model,
+    PrimaryKey,
+    Table
 } from 'sequelize-typescript';
 import Book from './Book';
 import Comment from './Comment';
 
-@Table
-export default class Chapter extends Model<Chapter> {
+@Table({
+    freezeTableName: true
+})
+class Chapter extends Model<Chapter> {
     @AllowNull(false)
     @PrimaryKey
     @Column
@@ -46,3 +57,5 @@ export default class Chapter extends Model<Chapter> {
         };
     }
 }
+
+export default Chapter;

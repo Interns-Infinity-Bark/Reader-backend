@@ -1,7 +1,7 @@
+import { Op } from 'sequelize';
+import { isInt } from 'validator';
 import User from '../models/User';
 import { jsonResp, md5 } from '../utils/stringUtil';
-import { isInt } from 'validator';
-import { Op } from 'sequelize';
 
 export const register = async (ctx: any) => {
     if (ctx.session.user) {
@@ -124,8 +124,8 @@ export const users = async (ctx: any) => {
             }
         }
     }) : await User.findAll();
-    if (page && isInt(page) && parseInt(page) > 0) {
-        users = users.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    if (page && isInt(page) && parseInt(page, 10) > 0) {
+        users = users.slice((parseInt(page, 10) - 1) * 10, parseInt(page, 10) * 10 - 1);
     }
     ctx.body = jsonResp('ok', 'success', {
         users: users

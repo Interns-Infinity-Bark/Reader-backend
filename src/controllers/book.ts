@@ -1,6 +1,6 @@
-import Book from '../models/Book';
 import { Op } from 'sequelize';
 import { isInt } from 'validator';
+import Book from '../models/Book';
 import { jsonResp } from '../utils/stringUtil';
 
 export const addBook = async (ctx: any) => {
@@ -54,8 +54,8 @@ export const books = async (ctx: any) => {
             }
         }
     }) : await Book.findAll();
-    if (page && isInt(page) && parseInt(page) > 0) {
-        books = books.slice((parseInt(page) - 1) * 10, parseInt(page) * 10 - 1);
+    if (page && isInt(page) && parseInt(page, 10) > 0) {
+        books = books.slice((parseInt(page, 10) - 1) * 10, parseInt(page, 10) * 10 - 1);
     }
     ctx.body = jsonResp('ok', 'success', {
         books: books

@@ -1,9 +1,9 @@
 import * as Router from 'koa-router';
-import { admin, login, logout, modifyPassword } from '../controllers/admin';
 import { requireAdmin } from '../controllers';
-import { users, disableUser, enableUser, deleteUser } from '../controllers/user';
+import { admin, login, logout, modifyPassword } from '../controllers/admin';
 import { addBook } from '../controllers/book';
 import { addChapter } from '../controllers/chapter';
+import { deleteUser, disableUser, enableUser, users } from '../controllers/user';
 
 export const router = new Router()
     .get('/', requireAdmin, admin)
@@ -15,5 +15,4 @@ export const router = new Router()
     .put('/enableUser', requireAdmin, enableUser)
     .delete('/deleteUser', requireAdmin, deleteUser)
     .post('/book', requireAdmin, addBook)
-    .post('/chapter', requireAdmin, addChapter)
-;
+    .post('/chapter', requireAdmin, addChapter);
